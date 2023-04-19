@@ -28,13 +28,14 @@ app.use(
 app.get('/', postController.getAllPosts);
 app.get('/post/:id', postController.getPost);
 app.post('/posts', postController.createPost);
-app.put('/post/:id', postController.updatePost);
+app.put('/confirmedpost/:id', postController.updatePost);
 app.delete('/post/:id', postController.deletePost);
-app.get('/post/update/:id', pageController.getUpdatePage);
+app.get('/confirmedpost/update/:id', pageController.getUpdatePage);
 app.get('/about', pageController.getAboutPage);
 app.get('/add_post', pageController.getAddPage);
 app.get('/post', pageController.getPostPage);
 app.get('/admin', pageController.getAdminPage);
+app.post("/confirmedpost/:id", postController.createConfirmedPost)
 
 const port = 3000;
 

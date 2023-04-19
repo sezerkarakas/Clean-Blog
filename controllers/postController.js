@@ -1,14 +1,15 @@
 const Post = require('../models/Posts');
+const ConfirmedPost = require('../models/confirmedPosts');
 
 const getAllPosts = async (req, res) => {
-  const posts = await Post.find({});
+  const posts = await ConfirmedPost.find({});
   res.render('index', {
     posts,
   });
 };
 
 const getPost = async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const post = await ConfirmedPost.findById(req.params.id);
   res.render('post', {
     post,
   });
@@ -22,15 +23,25 @@ const createPost = async (req, res) => {
   }
 };
 const updatePost = async (req, res) => {
-  const post = await Post.findOne({ _id: req.params.id });
+  const post = await ConfirmedPost.findOne({ _id: req.params.id });
   post.title = req.body.title;
   post.detail = req.body.detail;
   post.save();
   res.redirect(`/post/${req.params.id}`);
 };
 const deletePost = async (req, res) => {
-  await Post.findByIdAndRemove(req.params.id);
+  await ConfirmedPost.findByIdAndRemove(req.params.id);
   res.redirect('/');
+};
+
+const createConfirmedPost = async (req, res) => {
+  const selectedPost = await Post.findById(req.params.id);
+  await ConfirmedPost.create({
+    title: selectedPost.title,
+    detail: selectedPost.detail,
+  });
+  await Post.findByIdAndRemove(req.params.id);
+  res.redirect('/admin');
 };
 
 module.exports = {
@@ -39,4 +50,5 @@ module.exports = {
   createPost,
   updatePost,
   deletePost,
+  createConfirmedPost,
 };
